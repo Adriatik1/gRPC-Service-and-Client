@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcServer", "GrpcServer\GrpcServer.csproj", "{D8434E2C-0FFA-4428-9604-D757E393360B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "items", "items", "{9D9A18D2-A864-4D25-824F-1461C1A9DE15}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Desktop\grpc\grpc-go-course-master\ssl\ssl.sh = ..\..\..\Desktop\grpc\grpc-go-course-master\ssl\ssl.sh
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcClient", "GrpcClient\GrpcClient.csproj", "{A8983DF4-0DD3-43B0-B871-75FEEFD15197}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8434E2C-0FFA-4428-9604-D757E393360B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8434E2C-0FFA-4428-9604-D757E393360B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8434E2C-0FFA-4428-9604-D757E393360B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8434E2C-0FFA-4428-9604-D757E393360B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8983DF4-0DD3-43B0-B871-75FEEFD15197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8983DF4-0DD3-43B0-B871-75FEEFD15197}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8983DF4-0DD3-43B0-B871-75FEEFD15197}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8983DF4-0DD3-43B0-B871-75FEEFD15197}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9F29694D-2665-46B5-B7AD-3D9012A579DB}
+	EndGlobalSection
+EndGlobal

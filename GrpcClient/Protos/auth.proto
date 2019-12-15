@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServer.Protos";
+
+
+service authAdmin{
+	rpc StaffAuth(authInput) returns (authOutput);
+}
+
+message authInput{
+	string username = 1;
+	string password = 2;
+}
+
+message authOutput{
+	string token = 1;
+}

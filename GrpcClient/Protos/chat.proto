@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServer.Protos";
+
+
+service chat{
+	rpc Chatting (stream clientMessage) returns (stream serverMessage);
+}
+
+message clientMessage{
+	string message = 1;
+}
+
+
+message serverMessage{
+	string message = 1; 
+}

@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServer.Protos";
+
+
+service Customer {
+	rpc GetCustomer (Empty) returns (responseList);
+	rpc GetNewCustomers (Empty) returns (stream customerResponseModel);
+	rpc AddCustomersStream(stream newCustomerData) returns (stream newCustomerResponse);
+}
+
+message customerRequestModel{
+	int32 id = 1;
+}
+
+message customerResponseModel{
+	int32 id = 1;
+	string name = 2;
+	string username = 3;
+}
+
+message responseList{
+	repeated customerResponseModel resList = 1;
+}
+
+message Empty{
+
+}
+
+message newCustomerData{
+	string name = 1;
+	string username = 2;
+}
+
+message newCustomerResponse{
+	string message=1;
+}
