@@ -11,6 +11,7 @@
     <None Remove="Protos\chat.proto" />
     <None Remove="Protos\customer.proto" />
     <None Remove="Protos\greet.proto" />
+    <None Remove="Protos\products.proto" />
     <None Remove="Protos\sales.proto" />
   </ItemGroup>
 
@@ -28,6 +29,7 @@
     <Protobuf Include="Protos\chat.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\customer.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\products.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\sales.proto" GrpcServices="Client" />
   </ItemGroup>
 

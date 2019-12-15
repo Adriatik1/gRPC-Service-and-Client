@@ -97,6 +97,7 @@ namespace GrpcServer
                 endpoints.MapGrpcService<ChattingService>();
                 endpoints.MapGrpcService<AuthService>();
                 endpoints.MapGrpcService<SalesService>();
+                endpoints.MapGrpcService<ProductsService>();
 
                 endpoints.MapGet("/", async context =>
                 {

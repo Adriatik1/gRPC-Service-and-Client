@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServer.Protos";
+
+import "google/protobuf/empty.proto";
+
+service products{
+	rpc listAllProducts(google.protobuf.Empty) returns (productsRes);
+}
+
+message product{
+	int32 id = 1;
+	string productName = 2;
+	string productPrice = 3;
+	int32 stock = 4;
+}
+
+message productsRes{
+	repeated product productList = 1;
+}
