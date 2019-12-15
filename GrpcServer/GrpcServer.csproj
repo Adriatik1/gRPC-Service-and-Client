@@ -8,6 +8,7 @@
     <None Remove="Protos\auth.proto" />
     <None Remove="Protos\chat.proto" />
     <None Remove="Protos\customer.proto" />
+    <None Remove="Protos\sales.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,6 +16,7 @@
     <Protobuf Include="Protos\chat.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\customer.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\sales.proto" />
   </ItemGroup>
 
   <ItemGroup>

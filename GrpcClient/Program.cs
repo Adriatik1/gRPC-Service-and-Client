@@ -103,12 +103,12 @@ namespace Grpc_Client
                                     await call.RequestStream.CompleteAsync();
                                 }
                             }
-                            catch(Exception ex)
+                            catch
                             {
                                 Console.WriteLine("Lidhja tashme eshte mbyllur!");
                             }
                             break;
-                        case "3":
+                        case "3": //Shiko konsumatoret e regjistruar ne Real Time
                             try
                             {
                                 Console.WriteLine("Konsumatoret e regjistruar");
@@ -140,8 +140,36 @@ namespace Grpc_Client
                                 Console.WriteLine(e.Status.StatusCode);
                             }
                             break;
-                        case "4":
-                            
+                        case "4": //Shiko produktet e blera ne Real Time
+                            try
+                            {
+                                Console.WriteLine("Produktet e blera REAL TIME");
+                                var cClient = new sales.salesClient(channel);
+                                using (var call = cClient.getSalesInRealTime(new Google.Protobuf.WellKnownTypes.Empty()))
+                                {
+                                    var response = Task.Run(async () =>
+                                    {
+                                        while (await call.ResponseStream.MoveNext())
+                                        {
+                                            Console.WriteLine($"Customer: {call.ResponseStream.Current.Customer}, Product: {call.ResponseStream.Current.Product}, " +
+                                                $"Cmimi: {call.ResponseStream.Current.Price}, Data Blerjes: {call.ResponseStream.Current.Date}");
+                                        }
+                                    });
+
+                                    var line = Console.ReadLine();
+
+                                    if (line.ToLower().Equals("stop"))
+                                    {
+                                        call.Dispose();
+                                    }
+                                }
+
+                            }
+                            catch (RpcException e)
+                            {
+                                Console.WriteLine(e.Status.Detail);
+                                Console.WriteLine(e.Status.StatusCode);
+                            }
                             break;
                         default:
                             Console.WriteLine("Ju lutem zgjedhni njerin nga numrat");
