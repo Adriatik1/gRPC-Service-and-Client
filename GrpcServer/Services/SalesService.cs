@@ -72,7 +72,7 @@ namespace GrpcServer.Services
             }
         }
 
-        //[Authorize]
+        [Authorize]
         public override async Task getSalesInRealTime(Google.Protobuf.WellKnownTypes.Empty request, IServerStreamWriter<salesResponse> responseStream, ServerCallContext context)
         {
             SqlDependency.Start(Configuration.GetConnectionString("grpcDBConn"));
