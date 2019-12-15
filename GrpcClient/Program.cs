@@ -162,7 +162,7 @@ namespace Grpc_Client
                                     {
                                         call.Dispose();
                                     }
-                                }
+                                } 
 
                             }
                             catch (RpcException e)

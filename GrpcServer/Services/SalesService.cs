@@ -29,7 +29,7 @@ namespace GrpcServer.Services
             this.db = db;
             sales = new List<salesModel>();
             Configuration = configuration;
-            _logger = logger;
+            _logger = logger; 
         }
 
         private void streamON(object sender, SqlNotificationEventArgs e)
