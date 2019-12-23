@@ -20,7 +20,6 @@ namespace GrpcServer.Services
             this.db = db;
         }
 
-        [Authorize]
         public override async Task<productsRes> listAllProducts(Google.Protobuf.WellKnownTypes.Empty request, ServerCallContext context)
         {
             productsRes pRmodel = new productsRes();
@@ -33,6 +32,27 @@ namespace GrpcServer.Services
             }
 
             return await Task.FromResult(pRmodel);
+        }
+
+        public override async Task<buyResponseModel> buyProduct(buyRequestModel request, ServerCallContext context)
+        {
+            var customerDB = db.Customers.Where(x => x.Username == request.CustomerUsername && x.MobileNr == request.MobileNumber).SingleOrDefault();
+            buyResponseModel buyResult = new buyResponseModel();
+            try
+            {
+                if (request.ProductID == 0)
+                    return await Task.FromResult(new buyResponseModel { Message = "Ju lutem shenoni ID e produktit te cilit doni ta blini. Shfaqni listen e produkteve per te gjetur ID e tyre!" });
+                Sales newSale = new Sales();
+                newSale.ProductId = request.ProductID;
+                newSale.SaleDate = DateTime.UtcNow;
+                
+                newSale.CustomerId = customerDB==null ? 1244 : customerDB.Id; //1244 osht customer Guest
+                await db.Sales.AddAsync(newSale);
+                await db.SaveChangesAsync();
+                return await Task.FromResult(new buyResponseModel { Message = "Blerja eshte kryer me sukses!" });
+            }
+            catch { }
+            return await Task.FromResult(new buyResponseModel { Message = "Ka nodhur nje gabim!" });
         }
     }
 }

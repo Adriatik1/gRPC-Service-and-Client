@@ -24,12 +24,10 @@ namespace Grpc_Client
             //var clientKey = File.ReadAllText(@"ssl/client.key");
             //var caCrt = File.ReadAllText(@"ssl/ca.crt");
 
-            bool useAuth = true;
-
             var channel = GrpcChannel.ForAddress("https://localhost:5001", new GrpcChannelOptions
             {
                 MaxReceiveMessageSize = 550 * 1024 * 1024, 
-                MaxSendMessageSize = 200 * 1024 * 1024 
+                MaxSendMessageSize = 200 * 1024 * 1024
             });
 
             Console.WriteLine("Pershendetje \n \n Ju lutem zgjedhni sherbimin te cilin doni ta shftytezoni.");
@@ -193,60 +191,10 @@ namespace Grpc_Client
                     Console.WriteLine("Ju lutem zgjedhni njerin nga numrat!");
                 }
             }
-
-
-            if (useAuth)
-            {
-                try
-                {
-                    var authClient = new authAdmin.authAdminClient(channel);
-                    _token = authClient.StaffAuth(new authInput { Username = "adriatik", Password = "adriatik" }).Token.ToString();
-                    channel.Dispose();
-                    channel = CreateAuthenticatedChannel($"https://{Address}");
-                }
-                catch (RpcException e)
-                {
-                    Console.WriteLine(e.Status.Detail);
-                    Console.WriteLine(e.Status.StatusCode);
-                }
-            }
-
-            var customerClient = new Customer.CustomerClient(channel);
-            using (var call = customerClient.GetNewCustomers(new Empty()))
-            {
-                var response = Task.Run(async () =>
-                {
-                    while (await call.ResponseStream.MoveNext())
-                    {
-                        Console.WriteLine($"Name: {call.ResponseStream.Current.Name}, Username: {call.ResponseStream.Current.Username}");
-
-                    }
-
-                });
-                
-                    var line =  Console.ReadLine();
-                    
-                    if (line.ToLower().Equals("stop"))
-                    {
-                        call.Dispose();
-                        //channel.Dispose();
-                        Console.WriteLine("Disconnected from server!");
-                        Console.ReadKey();
-                    }
-                
-            }
-            var greetClient = new Greeter.GreeterClient(channel);
-
-            var greetRes = greetClient.SayHello(new HelloRequest { Name = "hej njeri" });
-            Console.WriteLine(greetRes.Message);
-
-                Console.ReadKey();
-
         }
 
         
-        
-
+       
         private static GrpcChannel CreateAuthenticatedChannel(string address)
         {
             var credentials = CallCredentials.FromInterceptor((context, metadata) =>

@@ -6,6 +6,7 @@ import "google/protobuf/empty.proto";
 
 service products{
 	rpc listAllProducts(google.protobuf.Empty) returns (productsRes);
+	rpc buyProduct(buyRequestModel) returns (buyResponseModel);
 }
 
 message product{
@@ -17,4 +18,14 @@ message product{
 
 message productsRes{
 	repeated product productList = 1;
+}
+
+message buyRequestModel{
+	string customerUsername = 1;
+	int32 mobileNumber = 2;
+	int32 productID = 3;
+}
+
+message buyResponseModel{
+	string message = 1;
 }
