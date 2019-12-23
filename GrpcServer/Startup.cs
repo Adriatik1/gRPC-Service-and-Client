@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Text;
+using Grpc.Core;
 
 namespace GrpcServer
 {
@@ -89,6 +90,25 @@ namespace GrpcServer
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseStatusCodePages(async context =>
+            {
+                if (context.HttpContext.Response.StatusCode == 401)
+                    throw new RpcException(new Status(StatusCode.PermissionDenied, "Nuk keni autorizim!"));
+                else
+                    throw new RpcException(new Status(StatusCode.PermissionDenied, "Ka ndodhur nje gabim!"));
+            });
+
+            app.Use(async (context, next) =>
+            {
+                await next();
+
+                // If response is unauthorized and the endpoint is a gRPC method then
+                // return grpc-status permission denied instead
+                if (context.Response.StatusCode == StatusCodes.Status401Unauthorized)
+                {
+                    throw new RpcException(new Status(StatusCode.PermissionDenied, "Nuk keni autorizim!"));
+                }
+            });
 
             app.UseEndpoints(endpoints =>
             {

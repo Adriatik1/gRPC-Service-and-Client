@@ -77,7 +77,7 @@ namespace Grpc_Client
                                     {
                                         while (await call.ResponseStream.MoveNext())
                                         {
-                                            Console.WriteLine(call.ResponseStream.Current.Message);
+                                            Console.WriteLine(call.ResponseStream.Current.Message);     
                                         }
                                     });
                                     
@@ -87,14 +87,31 @@ namespace Grpc_Client
                                             Console.WriteLine("Shenoni te dhenat per konsumatorin e ri");
                                             Console.WriteLine("Emri: "); name = Console.ReadLine();
                                             Console.WriteLine("Username: "); username = Console.ReadLine();
-                                            if (!String.IsNullOrEmpty(name) && !String.IsNullOrEmpty(username))
-                                            {
-                                                await call.RequestStream.WriteAsync(new newCustomerData { Name = name, Username = username });
+                                            Console.WriteLine("Mobile Nr"); string mobileNr = Console.ReadLine();
+                                        if (!String.IsNullOrEmpty(name) && !String.IsNullOrEmpty(username))
+                                        {
+                                            try {
+                                                bool nr = Int32.TryParse(mobileNr, out int numri);
+                                                await call.RequestStream.WriteAsync(new newCustomerData { Name = name, Username = username, MobileNr = nr == true ? numri : 0 });
                                             }
-                                            else
+                                            catch
                                             {
-                                                Console.WriteLine("Emri apo Username nuk eshte plotesuar!");
+                                                try
+                                                {
+                                                    Status status = call.GetStatus();
+                                                    if (status.StatusCode != StatusCode.OK)
+                                                        Console.WriteLine($"{status.StatusCode}, {status.Detail}");
+                                                }
+                                                catch{
+                                                    Console.WriteLine("Ka nodhur nje gabim!");
+                                                }
+                                                break;
                                             }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Emri apo Username nuk eshte plotesuar!");
+                                        }
                                             
                                             Console.WriteLine("Shtypni 'q' per te mbyllur, qfardo tasti tjeter per te vazhduar!");
                                             ConsoleKeyInfo ans = Console.ReadKey(true);
@@ -103,33 +120,30 @@ namespace Grpc_Client
                                     await call.RequestStream.CompleteAsync();
                                 }
                             }
-                            catch
+                            catch (RpcException ex)
                             {
-                                Console.WriteLine("Lidhja tashme eshte mbyllur!");
+                                Console.WriteLine(ex.StatusCode);
+                                Console.WriteLine(ex.Status.Detail);
                             }
                             break;
                         case "3": //Shiko konsumatoret e regjistruar ne Real Time
                             try
                             {
-                                Console.WriteLine("Konsumatoret e regjistruar");
+                                
                                 var cClient = new Customer.CustomerClient(channel);
-                                using (var call = cClient.GetNewCustomers(new Empty() { }))
+                                using (var call = cClient.GetNewCustomers(new Empty() { }, deadline: DateTime.UtcNow.AddSeconds(500)))
                                 {
-                                    var response = Task.Run(async () =>
+                                    Console.WriteLine("Konsumatoret e regjistruar");
+
+                                    var response = Task.Run(()=>
                                     {
-                                        while (await call.ResponseStream.MoveNext())
-                                        {
-                                            
-                                                Console.WriteLine($"Name: {call.ResponseStream.Current.Name}, Username: {call.ResponseStream.Current.Username}");
-                                            
-                                        }
+                                        var line = Console.ReadLine();
+                                        call.Dispose();
                                     });
 
-                                    var line = Console.ReadLine();
-
-                                    if (line.ToLower().Equals("stop"))
+                                    while (await call.ResponseStream.MoveNext())
                                     {
-                                        call.Dispose();
+                                        Console.WriteLine($"Name: {call.ResponseStream.Current.Name}, Username: {call.ResponseStream.Current.Username}, Mobile Number: {call.ResponseStream.Current.MobileNr}");
                                     }
                                 }
 
@@ -143,24 +157,20 @@ namespace Grpc_Client
                         case "4": //Shiko produktet e blera ne Real Time
                             try
                             {
-                                Console.WriteLine("Produktet e blera REAL TIME");
                                 var cClient = new sales.salesClient(channel);
                                 using (var call = cClient.getSalesInRealTime(new Google.Protobuf.WellKnownTypes.Empty()))
                                 {
-                                    var response = Task.Run(async () =>
+                                    Console.WriteLine("Produktet e blera REAL TIME");
+                                    var response = Task.Run(() =>
                                     {
-                                        while (await call.ResponseStream.MoveNext())
-                                        {
-                                            Console.WriteLine($"Customer: {call.ResponseStream.Current.Customer}, Product: {call.ResponseStream.Current.Product}, " +
-                                                $"Cmimi: {call.ResponseStream.Current.Price}, Data Blerjes: {call.ResponseStream.Current.Date}");
-                                        }
+                                        var line = Console.ReadLine();
+                                        call.Dispose();
                                     });
 
-                                    var line = Console.ReadLine();
-
-                                    if (line.ToLower().Equals("stop"))
+                                    while (await call.ResponseStream.MoveNext())
                                     {
-                                        call.Dispose();
+                                        Console.WriteLine($"Customer: {call.ResponseStream.Current.Customer}, Product: {call.ResponseStream.Current.Product}, " +
+                                            $"Cmimi: {call.ResponseStream.Current.Price}, Data Blerjes: {call.ResponseStream.Current.Date}");
                                     }
                                 } 
 
@@ -176,8 +186,10 @@ namespace Grpc_Client
                             break;
                     }
                 }
-                catch
+                catch (RpcException ex)
                 {
+                    Console.WriteLine(ex.StatusCode);
+                    Console.WriteLine(ex.Status.Detail);
                     Console.WriteLine("Ju lutem zgjedhni njerin nga numrat!");
                 }
             }

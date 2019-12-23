@@ -2,6 +2,7 @@
 using Grpc.Core;
 using GrpcServer.Protos;
 using GrpcServer.Repository.DBModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -19,6 +20,7 @@ namespace GrpcServer.Services
             this.db = db;
         }
 
+        [Authorize]
         public override async Task<productsRes> listAllProducts(Google.Protobuf.WellKnownTypes.Empty request, ServerCallContext context)
         {
             productsRes pRmodel = new productsRes();

@@ -17,6 +17,7 @@ message customerResponseModel{
 	int32 id = 1;
 	string name = 2;
 	string username = 3;
+	string mobileNr = 4;
 }
 
 message responseList{
@@ -30,6 +31,7 @@ message Empty{
 message newCustomerData{
 	string name = 1;
 	string username = 2;
+	int32 mobileNr = 3;
 }
 
 message newCustomerResponse{
